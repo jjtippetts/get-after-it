@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "get-after-it"
+  },
+  "targets": {
+    "get-after-it": {
+      "hosting": {
+        "app": [
+          "get-after-it-site"
+        ]
+      }
+    }
+  }
+}

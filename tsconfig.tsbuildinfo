@@ -1,1 +1,1 @@
-{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/context/authcontext.tsx","./src/lib/firebase.ts","./src/pages/signin.tsx","./src/pages/signup.tsx"],"version":"5.9.2"}
+{"root":["./src/App.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/context/AuthContext.tsx","./src/lib/firebase.ts","./src/pages/SignIn.tsx","./src/pages/SignUp.tsx"],"version":"5.9.2"}
