@@ -11,6 +11,7 @@ import { useState, type ReactNode } from 'react'
 
 import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
+import HomePage from './pages/Home'
 import { useAuth } from './context/AuthContext'
 
 const router = createBrowserRouter([
@@ -102,18 +103,6 @@ function RootLayout() {
         <Outlet />
       </main>
     </div>
-  )
-}
-
-function HomePage() {
-  return (
-    <section className="rounded-2xl border border-slate-800 bg-slate-900/60 p-10 shadow-xl shadow-slate-950/40">
-      <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Let&apos;s build something awesome</h1>
-      <p className="mt-4 text-slate-300">
-        Your Firebase powered React experience starts here. Update this page as you flesh out routes,
-        authentication, and data fetching.
-      </p>
-    </section>
   )
 }
 
