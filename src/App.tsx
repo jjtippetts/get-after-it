@@ -11,6 +11,9 @@ import { useState, type ReactNode } from 'react'
 
 import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
+import GroupsList from './pages/GroupsList'
+import CreateGroup from './pages/CreateGroup'
+import GroupDetails from './pages/GroupDetails'
 import { useAuth } from './context/AuthContext'
 
 const router = createBrowserRouter([
@@ -22,7 +25,31 @@ const router = createBrowserRouter([
         index: true,
         element: (
           <RequireAuth>
-            <HomePage />
+            <GroupsList />
+          </RequireAuth>
+        )
+      },
+      {
+        path: 'groups',
+        element: (
+          <RequireAuth>
+            <GroupsList />
+          </RequireAuth>
+        )
+      },
+      {
+        path: 'groups/new',
+        element: (
+          <RequireAuth>
+            <CreateGroup />
+          </RequireAuth>
+        )
+      },
+      {
+        path: 'groups/:groupId',
+        element: (
+          <RequireAuth>
+            <GroupDetails />
           </RequireAuth>
         )
       }
@@ -65,6 +92,12 @@ function RootLayout() {
           <nav className="flex items-center gap-4 text-sm">
             {user ? (
               <>
+                <Link className="text-slate-300 transition hover:text-white" to="/groups">
+                  Groups
+                </Link>
+                <Link className="text-slate-300 transition hover:text-white" to="/groups/new">
+                  Create group
+                </Link>
                 <div className="flex items-center gap-2 text-slate-300">
                   {user.photoURL ? (
                     <img
@@ -102,18 +135,6 @@ function RootLayout() {
         <Outlet />
       </main>
     </div>
-  )
-}
-
-function HomePage() {
-  return (
-    <section className="rounded-2xl border border-slate-800 bg-slate-900/60 p-10 shadow-xl shadow-slate-950/40">
-      <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Let&apos;s build something awesome</h1>
-      <p className="mt-4 text-slate-300">
-        Your Firebase powered React experience starts here. Update this page as you flesh out routes,
-        authentication, and data fetching.
-      </p>
-    </section>
   )
 }
 
