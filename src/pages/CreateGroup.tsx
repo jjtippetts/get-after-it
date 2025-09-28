@@ -70,14 +70,14 @@ export default function CreateGroup() {
 
   return (
     <div className="mx-auto max-w-2xl">
-      <h1 className="text-3xl font-semibold text-white">Create a group</h1>
-      <p className="mt-2 text-sm text-slate-400">
+      <h1 className="text-3xl font-semibold text-slate-900 dark:text-white">Create a group</h1>
+      <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
         Set up a new accountability group and invite friends to join your challenge.
       </p>
 
       <form onSubmit={handleSubmit} className="mt-8 space-y-6">
         <div className="space-y-2">
-          <label htmlFor="group-name" className="text-sm font-medium text-slate-200">
+          <label htmlFor="group-name" className="text-sm font-medium text-slate-700 dark:text-slate-200">
             Group name
           </label>
           <input
@@ -87,12 +87,12 @@ export default function CreateGroup() {
             value={name}
             onChange={(event) => setName(event.target.value)}
             placeholder="Morning Hustlers"
-            className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+            className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-500 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/40 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
           />
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="group-description" className="text-sm font-medium text-slate-200">
+          <label htmlFor="group-description" className="text-sm font-medium text-slate-700 dark:text-slate-200">
             Description
           </label>
           <textarea
@@ -102,7 +102,7 @@ export default function CreateGroup() {
             onChange={(event) => setDescription(event.target.value)}
             placeholder="Describe your challenge or group goals"
             rows={4}
-            className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+            className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-500 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/40 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
           />
         </div>
 
@@ -114,7 +114,9 @@ export default function CreateGroup() {
           >
             {creating ? 'Creating…' : 'Create group'}
           </button>
-          {error ? <p className="text-sm text-red-400">{error}</p> : null}
+          {error ? (
+            <p className="text-sm text-rose-600 dark:text-red-400">{error}</p>
+          ) : null}
         </div>
       </form>
     </div>

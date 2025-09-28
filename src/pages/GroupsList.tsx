@@ -255,7 +255,7 @@ export default function GroupsList() {
 
   if (loading) {
     return (
-      <div className="flex justify-center py-20 text-slate-300">
+      <div className="flex justify-center py-20 text-slate-500 dark:text-slate-300">
         <span>Loading your groups…</span>
       </div>
     )
@@ -265,8 +265,8 @@ export default function GroupsList() {
     <div className="space-y-10">
       <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-semibold text-white">Your groups</h1>
-          <p className="text-sm text-slate-400">
+          <h1 className="text-3xl font-semibold text-slate-900 dark:text-white">Your groups</h1>
+          <p className="text-sm text-slate-600 dark:text-slate-400">
             Join an existing challenge or create a new accountability group.
           </p>
         </div>
@@ -283,21 +283,22 @@ export default function GroupsList() {
           groups.map((group) => (
             <article
               key={group.id}
-              className="rounded-xl border border-slate-800 bg-slate-900/60 p-6 shadow-sm shadow-slate-950/60"
+              className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/60 dark:shadow-slate-950/60"
             >
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <h2 className="text-xl font-semibold text-white">{group.name}</h2>
+                  <h2 className="text-xl font-semibold text-slate-900 dark:text-white">{group.name}</h2>
                   {group.description ? (
-                    <p className="mt-2 text-sm text-slate-300">{group.description}</p>
+                    <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{group.description}</p>
                   ) : null}
-                  <p className="mt-3 text-xs uppercase tracking-wide text-slate-500">
-                    Invite code: <span className="font-mono text-slate-300">{group.inviteCode}</span>
+                  <p className="mt-3 text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                    Invite code:{' '}
+                    <span className="font-mono text-slate-700 dark:text-slate-300">{group.inviteCode}</span>
                   </p>
                 </div>
                 <Link
                   to={`/groups/${group.id}`}
-                  className="rounded-lg border border-slate-700 px-3 py-1 text-sm font-medium text-slate-200 transition hover:border-sky-500 hover:text-white"
+                  className="rounded-lg border border-slate-300 px-3 py-1 text-sm font-medium text-slate-700 transition hover:border-sky-500 hover:text-slate-900 dark:border-slate-700 dark:text-slate-200 dark:hover:text-white"
                 >
                   View
                 </Link>
@@ -305,8 +306,8 @@ export default function GroupsList() {
             </article>
           ))
         ) : (
-          <div className="rounded-xl border border-dashed border-slate-800 p-10 text-center text-slate-400">
-            <p className="font-medium text-slate-300">No groups yet</p>
+          <div className="rounded-xl border border-dashed border-slate-300 p-10 text-center text-slate-600 dark:border-slate-800 dark:text-slate-400">
+            <p className="font-medium text-slate-700 dark:text-slate-300">No groups yet</p>
             <p className="mt-2 text-sm">
               Create your first group or join one with an invite code.
             </p>
@@ -314,9 +315,9 @@ export default function GroupsList() {
         )}
       </section>
 
-      <section className="rounded-xl border border-slate-800 bg-slate-900/60 p-6 shadow-sm shadow-slate-950/60">
-        <h2 className="text-lg font-semibold text-white">Join with invite code</h2>
-        <p className="mt-2 text-sm text-slate-400">
+      <section className="rounded-xl border border-slate-200 bg-slate-50 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/60 dark:shadow-slate-950/60">
+        <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Join with invite code</h2>
+        <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
           Ask a friend for their group&apos;s invite code to hop in instantly.
         </p>
         <form onSubmit={handleJoinByCode} className="mt-4 flex flex-col gap-3 sm:flex-row">
@@ -325,7 +326,7 @@ export default function GroupsList() {
             value={inviteCode}
             onChange={(event) => setInviteCode(event.target.value.toUpperCase())}
             placeholder="ENTER CODE"
-            className="flex-1 rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+            className="flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-500 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/40 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
           />
           <button
             type="submit"
@@ -336,13 +337,13 @@ export default function GroupsList() {
           </button>
         </form>
         {joinMessage ? (
-          <p className="mt-3 text-sm text-slate-300">{joinMessage}</p>
+          <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">{joinMessage}</p>
         ) : null}
       </section>
 
-      <section className="rounded-xl border border-slate-800 bg-slate-900/60 p-6 shadow-sm shadow-slate-950/60">
-        <h2 className="text-lg font-semibold text-white">Find groups</h2>
-        <p className="mt-2 text-sm text-slate-400">
+      <section className="rounded-xl border border-slate-200 bg-slate-50 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/60 dark:shadow-slate-950/60">
+        <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Find groups</h2>
+        <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
           Search for public groups by name and request to join instantly.
         </p>
         <div className="mt-4 flex flex-col gap-3">
@@ -351,10 +352,10 @@ export default function GroupsList() {
             value={searchTerm}
             onChange={(event) => setSearchTerm(event.target.value)}
             placeholder="Search for groups"
-            className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+            className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-500 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/40 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
           />
           {searching ? (
-            <p className="text-sm text-slate-400">Searching…</p>
+            <p className="text-sm text-slate-600 dark:text-slate-400">Searching…</p>
           ) : null}
           <div className="space-y-3">
             {searchResults.map((group) => {
@@ -362,18 +363,18 @@ export default function GroupsList() {
               return (
                 <div
                   key={group.id}
-                  className="flex flex-col justify-between gap-3 rounded-lg border border-slate-800 bg-slate-950/60 p-4 sm:flex-row sm:items-center"
+                  className="flex flex-col justify-between gap-3 rounded-lg border border-slate-200 bg-white p-4 sm:flex-row sm:items-center dark:border-slate-800 dark:bg-slate-950/60"
                 >
                   <div>
-                    <p className="font-medium text-white">{group.name}</p>
+                    <p className="font-medium text-slate-900 dark:text-white">{group.name}</p>
                     {group.description ? (
-                      <p className="text-sm text-slate-400">{group.description}</p>
+                      <p className="text-sm text-slate-600 dark:text-slate-400">{group.description}</p>
                     ) : null}
                   </div>
                   <div className="flex items-center gap-2">
                     <Link
                       to={`/groups/${group.id}`}
-                      className="rounded-lg border border-slate-700 px-3 py-1 text-xs font-medium uppercase tracking-wide text-slate-300 transition hover:border-sky-500 hover:text-white"
+                      className="rounded-lg border border-slate-300 px-3 py-1 text-xs font-medium uppercase tracking-wide text-slate-600 transition hover:border-sky-500 hover:text-slate-900 dark:border-slate-700 dark:text-slate-300 dark:hover:text-white"
                     >
                       View
                     </Link>
@@ -393,7 +394,7 @@ export default function GroupsList() {
         </div>
       </section>
 
-      {error ? <p className="text-sm text-red-400">{error}</p> : null}
+      {error ? <p className="text-sm text-rose-600 dark:text-red-400">{error}</p> : null}
     </div>
   )
 }
