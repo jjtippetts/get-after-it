@@ -570,7 +570,7 @@ export default function GroupDetails() {
 
   if (loading) {
     return (
-      <div className="flex justify-center py-20 text-slate-300">
+      <div className="flex justify-center py-20 text-slate-500 dark:text-slate-300">
         <span>Loading group…</span>
       </div>
     )
@@ -578,11 +578,11 @@ export default function GroupDetails() {
 
   if (!group) {
     return (
-      <div className="space-y-4 text-slate-300">
+      <div className="space-y-4 text-slate-600 dark:text-slate-300">
         <p>We couldn&apos;t find that group.</p>
         <Link
           to="/groups"
-          className="text-sm font-medium text-sky-400 transition hover:text-sky-300"
+          className="text-sm font-medium text-sky-600 transition hover:text-sky-500 dark:text-sky-400 dark:hover:text-sky-300"
         >
           Back to groups
         </Link>
@@ -594,24 +594,25 @@ export default function GroupDetails() {
     <div className="space-y-10">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-semibold text-white">{group.name}</h1>
+          <h1 className="text-3xl font-semibold text-slate-900 dark:text-white">{group.name}</h1>
           {group.description ? (
-            <p className="mt-2 text-sm text-slate-300">{group.description}</p>
+            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{group.description}</p>
           ) : null}
-          <p className="mt-4 text-xs uppercase tracking-wide text-slate-500">
-            Invite code: <span className="font-mono text-slate-300">{group.inviteCode}</span>
+          <p className="mt-4 text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
+            Invite code:{' '}
+            <span className="font-mono text-slate-800 dark:text-slate-300">{group.inviteCode}</span>
           </p>
         </div>
         <Link
           to="/groups"
-          className="inline-flex items-center justify-center rounded-lg border border-slate-700 px-3 py-1 text-sm font-medium text-slate-200 transition hover:border-sky-500 hover:text-white"
+          className="inline-flex items-center justify-center rounded-lg border border-slate-300 px-3 py-1 text-sm font-medium text-slate-700 transition hover:border-sky-500 hover:text-slate-900 dark:border-slate-700 dark:text-slate-200 dark:hover:text-white"
         >
           Back to groups
         </Link>
       </div>
 
       {membership ? null : (
-        <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-6 text-amber-100">
+        <div className="rounded-xl border border-amber-200 bg-amber-50 p-6 text-amber-800 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-100">
           <p className="font-medium">You&apos;re viewing this group as a guest.</p>
           <p className="mt-2 text-sm">
             Ask the owner for the invite code to join and participate in the challenge.
@@ -619,16 +620,17 @@ export default function GroupDetails() {
         </div>
       )}
 
-      <section className="rounded-xl border border-slate-800 bg-slate-900/60 p-6 shadow-sm shadow-slate-950/60">
-        <h2 className="text-lg font-semibold text-white">Current goal</h2>
+      <section className="rounded-xl border border-slate-200 bg-slate-50 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/60 dark:shadow-slate-950/60">
+        <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Current goal</h2>
         {goal ? (
-          <div className="mt-4 space-y-2 text-sm text-slate-300">
+          <div className="mt-4 space-y-2 text-sm text-slate-600 dark:text-slate-300">
             <p>
-              Challenge: <span className="font-medium text-white">{goal.challengeType}</span>
+              Challenge:{' '}
+              <span className="font-medium text-slate-900 dark:text-white">{goal.challengeType}</span>
             </p>
             <p>
               Goal type:{' '}
-              <span className="font-medium text-white">
+              <span className="font-medium text-slate-900 dark:text-white">
                 {goal.goalType === 'daily'
                   ? 'Daily habit (one log per day)'
                   : 'Numeric total'}
@@ -636,29 +638,29 @@ export default function GroupDetails() {
             </p>
             <p>
               {goal.goalType === 'daily' ? 'Target days' : 'Target total'}:{' '}
-              <span className="font-medium text-white">{goal.targetValue}</span>
+              <span className="font-medium text-slate-900 dark:text-white">{goal.targetValue}</span>
             </p>
             <p>
               {goal.goalType === 'daily' ? 'Group days logged' : 'Group total logged'}:{' '}
-              <span className="font-medium text-white">{aggregatedProgress.groupTotal}</span>
+              <span className="font-medium text-slate-900 dark:text-white">{aggregatedProgress.groupTotal}</span>
             </p>
             {goal.targetValue ? (
               <p>
                 Progress:{' '}
-                <span className="font-medium text-white">
+                <span className="font-medium text-slate-900 dark:text-white">
                   {Math.min(aggregatedProgress.groupTotal, goal.targetValue)}/{goal.targetValue}
                 </span>
               </p>
             ) : null}
           </div>
         ) : (
-          <p className="mt-4 text-sm text-slate-400">No goal configured yet.</p>
+          <p className="mt-4 text-sm text-slate-600 dark:text-slate-400">No goal configured yet.</p>
         )}
 
         {isOwner ? (
           <form onSubmit={handleSaveGoal} className="mt-6 space-y-4">
             <div className="space-y-2">
-              <label htmlFor="challenge-type" className="text-sm font-medium text-slate-200">
+              <label htmlFor="challenge-type" className="text-sm font-medium text-slate-700 dark:text-slate-200">
                 Challenge type
               </label>
               <input
@@ -667,12 +669,12 @@ export default function GroupDetails() {
                 value={goalChallengeType}
                 onChange={(event) => setGoalChallengeType(event.target.value)}
                 placeholder="Workout days"
-                className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-500 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/40 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
               />
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="goal-type" className="text-sm font-medium text-slate-200">
+              <label htmlFor="goal-type" className="text-sm font-medium text-slate-700 dark:text-slate-200">
                 Goal type
               </label>
               <select
@@ -681,7 +683,7 @@ export default function GroupDetails() {
                 onChange={(event) =>
                   setGoalType(event.target.value === 'daily' ? 'daily' : 'numeric')
                 }
-                className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/40 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
               >
                 <option value="numeric">Numeric total (minutes, miles, reps, etc.)</option>
                 <option value="daily">Daily habit (log once per day)</option>
@@ -689,7 +691,7 @@ export default function GroupDetails() {
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="target-value" className="text-sm font-medium text-slate-200">
+              <label htmlFor="target-value" className="text-sm font-medium text-slate-700 dark:text-slate-200">
                 Target value
               </label>
               <input
@@ -699,7 +701,7 @@ export default function GroupDetails() {
                 value={goalTargetValue}
                 onChange={(event) => setGoalTargetValue(event.target.value)}
                 placeholder="5"
-                className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-500 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/40 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
               />
             </div>
 
@@ -711,13 +713,15 @@ export default function GroupDetails() {
               >
                 {savingGoal ? 'Saving…' : 'Save goal'}
               </button>
-              {goalMessage ? <p className="text-sm text-slate-300">{goalMessage}</p> : null}
+              {goalMessage ? (
+                <p className="text-sm text-slate-600 dark:text-slate-300">{goalMessage}</p>
+              ) : null}
             </div>
             <button
               type="button"
               onClick={handleResetChallenge}
               disabled={resettingChallenge}
-              className="inline-flex items-center justify-center rounded-lg border border-red-500/60 px-4 py-2 text-sm font-medium text-red-300 transition hover:border-red-400 hover:text-red-200 disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center justify-center rounded-lg border border-red-200 px-4 py-2 text-sm font-medium text-red-600 transition hover:border-red-400 hover:text-red-500 disabled:cursor-not-allowed disabled:opacity-60 dark:border-red-500/60 dark:text-red-300 dark:hover:border-red-400 dark:hover:text-red-200"
             >
               {resettingChallenge ? 'Resetting…' : 'Reset challenge'}
             </button>
@@ -725,13 +729,13 @@ export default function GroupDetails() {
         ) : null}
       </section>
 
-      <section className="rounded-xl border border-slate-800 bg-slate-900/60 p-6 shadow-sm shadow-slate-950/60">
-        <h2 className="text-lg font-semibold text-white">Log progress</h2>
+      <section className="rounded-xl border border-slate-200 bg-slate-50 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/60 dark:shadow-slate-950/60">
+        <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Log progress</h2>
         {membership ? (
           <form onSubmit={handleSaveProgress} className="mt-4 space-y-4">
             <div className="grid gap-4 sm:grid-cols-3">
               <div className="space-y-2">
-                <label htmlFor="progress-date" className="text-sm font-medium text-slate-200">
+                <label htmlFor="progress-date" className="text-sm font-medium text-slate-700 dark:text-slate-200">
                   Date
                 </label>
                 <input
@@ -740,19 +744,19 @@ export default function GroupDetails() {
                   value={progressDate}
                   max={new Date().toISOString().slice(0, 10)}
                   onChange={(event) => setProgressDate(event.target.value)}
-                  className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/40 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
                 />
               </div>
               {goal?.goalType === 'daily' ? (
                 <div className="space-y-2">
-                  <p className="text-sm font-medium text-slate-200">Daily log</p>
-                  <p className="rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-sm text-slate-300">
+                  <p className="text-sm font-medium text-slate-700 dark:text-slate-200">Daily log</p>
+                  <p className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-600 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300">
                     Each submission counts as one day completed.
                   </p>
                 </div>
               ) : (
                 <div className="space-y-2">
-                  <label htmlFor="progress-quantity" className="text-sm font-medium text-slate-200">
+                  <label htmlFor="progress-quantity" className="text-sm font-medium text-slate-700 dark:text-slate-200">
                     Quantity
                   </label>
                   <input
@@ -763,12 +767,12 @@ export default function GroupDetails() {
                     value={progressQuantity}
                     onChange={(event) => setProgressQuantity(event.target.value)}
                     placeholder="1"
-                    className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                    className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/40 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
                   />
                 </div>
               )}
               <div className="space-y-2 sm:col-span-3">
-                <label htmlFor="progress-notes" className="text-sm font-medium text-slate-200">
+                <label htmlFor="progress-notes" className="text-sm font-medium text-slate-700 dark:text-slate-200">
                   Notes (optional)
                 </label>
                 <textarea
@@ -777,7 +781,7 @@ export default function GroupDetails() {
                   onChange={(event) => setProgressNotes(event.target.value)}
                   placeholder="What did you accomplish today?"
                   rows={3}
-                  className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/40 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
                 />
               </div>
             </div>
@@ -789,16 +793,20 @@ export default function GroupDetails() {
               >
                 {savingProgress ? 'Saving…' : 'Log progress'}
               </button>
-              {progressMessage ? <p className="text-sm text-slate-300">{progressMessage}</p> : null}
-              {progressError ? <p className="text-sm text-red-400">{progressError}</p> : null}
+              {progressMessage ? (
+                <p className="text-sm text-slate-600 dark:text-slate-300">{progressMessage}</p>
+              ) : null}
+              {progressError ? (
+                <p className="text-sm text-rose-600 dark:text-red-400">{progressError}</p>
+              ) : null}
             </div>
           </form>
         ) : (
-          <p className="mt-4 text-sm text-slate-400">Join the group to log your progress.</p>
+          <p className="mt-4 text-sm text-slate-600 dark:text-slate-400">Join the group to log your progress.</p>
         )}
 
         <div className="mt-6">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
             Group history
           </h3>
           {historyEntries.length ? (
@@ -811,34 +819,34 @@ export default function GroupDetails() {
                 return (
                   <li
                     key={entry.id}
-                    className="rounded-lg border border-slate-800 bg-slate-950/60 px-4 py-3 text-sm text-slate-300"
+                    className="rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-600 dark:border-slate-800 dark:bg-slate-950/60 dark:text-slate-300"
                   >
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <div>
-                        <p className="text-sm font-medium text-white">{entry.displayName}</p>
-                        <p className="text-xs text-slate-500">
+                        <p className="text-sm font-medium text-slate-900 dark:text-white">{entry.displayName}</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">
                           {createdDate.toLocaleString()}
                         </p>
                       </div>
-                      <span className="text-emerald-400">{entry.displayQuantity}</span>
+                      <span className="text-emerald-600 dark:text-emerald-400">{entry.displayQuantity}</span>
                     </div>
                     {entry.notes ? (
-                      <p className="mt-2 text-xs text-slate-400">{entry.notes}</p>
+                      <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">{entry.notes}</p>
                     ) : null}
                   </li>
                 )
               })}
             </ul>
           ) : (
-            <p className="mt-3 text-sm text-slate-400">No progress logged yet.</p>
+            <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">No progress logged yet.</p>
           )}
         </div>
       </section>
 
-      <section className="rounded-xl border border-slate-800 bg-slate-900/60 p-6 shadow-sm shadow-slate-950/60">
-        <h2 className="text-lg font-semibold text-white">Leaderboard</h2>
+      <section className="rounded-xl border border-slate-200 bg-slate-50 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/60 dark:shadow-slate-950/60">
+        <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Leaderboard</h2>
         {goal && aggregatedProgress.winners.length ? (
-          <div className="mt-4 rounded-lg border border-emerald-500/40 bg-emerald-500/10 p-4 text-sm text-emerald-100">
+          <div className="mt-4 rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-700 dark:border-emerald-500/40 dark:bg-emerald-500/10 dark:text-emerald-100">
             <p className="font-medium">
               {aggregatedProgress.winners.length > 1 ? 'We have winners!' : 'We have a winner!'}
             </p>
@@ -856,7 +864,7 @@ export default function GroupDetails() {
             {aggregatedProgress.rows.map((row) => (
               <li
                 key={row.userId}
-                className="flex flex-col gap-2 rounded-lg border border-slate-800 bg-slate-950/60 px-4 py-3 text-sm text-slate-300 sm:flex-row sm:items-center sm:justify-between"
+                className="flex flex-col gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-600 sm:flex-row sm:items-center sm:justify-between dark:border-slate-800 dark:bg-slate-950/60 dark:text-slate-300"
               >
                 <div className="flex items-center gap-3">
                   {row.photoURL ? (
@@ -872,13 +880,13 @@ export default function GroupDetails() {
                     </div>
                   )}
                   <div>
-                    <p className="text-sm font-medium text-white">{row.displayName}</p>
+                    <p className="text-sm font-medium text-slate-900 dark:text-white">{row.displayName}</p>
                     {row.completedAt ? (
-                      <p className="text-xs text-emerald-400">
+                      <p className="text-xs text-emerald-600 dark:text-emerald-400">
                         Goal met on {row.completedAt.toLocaleDateString()}
                       </p>
                     ) : (
-                      <p className="text-xs text-slate-500">
+                      <p className="text-xs text-slate-500 dark:text-slate-400">
                         {goal?.goalType === 'daily'
                           ? `${row.entries.length} ${row.entries.length === 1 ? 'day' : 'days'} logged`
                           : `${row.entries.length} entr${row.entries.length === 1 ? 'y' : 'ies'}`}
@@ -886,7 +894,7 @@ export default function GroupDetails() {
                     )}
                   </div>
                 </div>
-                <p className="text-sm font-semibold text-sky-300">
+                <p className="text-sm font-semibold text-sky-600 dark:text-sky-300">
                   {goal?.goalType === 'daily'
                     ? `${row.total} day${row.total === 1 ? '' : 's'}`
                     : row.total}
@@ -895,18 +903,18 @@ export default function GroupDetails() {
             ))}
           </ul>
         ) : (
-          <p className="mt-4 text-sm text-slate-400">No progress logged yet.</p>
+          <p className="mt-4 text-sm text-slate-600 dark:text-slate-400">No progress logged yet.</p>
         )}
       </section>
 
-      <section className="rounded-xl border border-slate-800 bg-slate-900/60 p-6 shadow-sm shadow-slate-950/60">
-        <h2 className="text-lg font-semibold text-white">Members</h2>
+      <section className="rounded-xl border border-slate-200 bg-slate-50 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/60 dark:shadow-slate-950/60">
+        <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Members</h2>
         {members.length ? (
           <ul className="mt-4 space-y-3">
             {members.map((member) => (
               <li
                 key={member.id}
-                className="flex items-center justify-between gap-4 rounded-lg border border-slate-800 bg-slate-950/60 px-4 py-3"
+                className="flex items-center justify-between gap-4 rounded-lg border border-slate-200 bg-white px-4 py-3 dark:border-slate-800 dark:bg-slate-950/60"
               >
                 <div className="flex items-center gap-3">
                   {member.photoURL ? (
@@ -922,12 +930,12 @@ export default function GroupDetails() {
                     </div>
                   )}
                   <div>
-                    <p className="text-sm font-medium text-white">{member.displayName}</p>
-                    <p className="text-xs uppercase tracking-wide text-slate-500">{member.role}</p>
+                    <p className="text-sm font-medium text-slate-900 dark:text-white">{member.displayName}</p>
+                    <p className="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">{member.role}</p>
                   </div>
                 </div>
                 {member.joinedAt ? (
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
                     Joined {member.joinedAt.toDate().toLocaleDateString()}
                   </p>
                 ) : null}
@@ -935,11 +943,11 @@ export default function GroupDetails() {
             ))}
           </ul>
         ) : (
-          <p className="mt-4 text-sm text-slate-400">No members yet.</p>
+          <p className="mt-4 text-sm text-slate-600 dark:text-slate-400">No members yet.</p>
         )}
       </section>
 
-      {error ? <p className="text-sm text-red-400">{error}</p> : null}
+      {error ? <p className="text-sm text-rose-600 dark:text-red-400">{error}</p> : null}
     </div>
   )
 }
