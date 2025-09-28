@@ -85,6 +85,7 @@ export default function GroupDetails() {
   const [progressNotes, setProgressNotes] = useState('')
   const [progressMessage, setProgressMessage] = useState<string | null>(null)
   const [progressError, setProgressError] = useState<string | null>(null)
+  const [deletingEntryId, setDeletingEntryId] = useState<string | null>(null)
   const [savingProgress, setSavingProgress] = useState(false)
 
   useEffect(() => {
@@ -568,6 +569,32 @@ export default function GroupDetails() {
     }
   }
 
+  const handleDeleteProgress = async (entry: ProgressEntry) => {
+    if (!groupId || !user || user.uid !== entry.userId) {
+      return
+    }
+
+    const confirmed = window.confirm('Delete this progress log?')
+    if (!confirmed) {
+      return
+    }
+
+    setDeletingEntryId(entry.id)
+    setProgressError(null)
+    setProgressMessage(null)
+
+    try {
+      const progressRef = doc(db, 'progress', entry.id)
+      await deleteDoc(progressRef)
+      setProgressMessage('Progress log deleted.')
+    } catch (deleteError) {
+      console.error(deleteError)
+      setProgressError('Unable to delete this progress entry right now.')
+    } finally {
+      setDeletingEntryId(null)
+    }
+  }
+
   if (loading) {
     return (
       <div className="flex justify-center py-20 text-slate-300">
@@ -804,23 +831,39 @@ export default function GroupDetails() {
           {historyEntries.length ? (
             <ul className="mt-3 space-y-3">
               {historyEntries.map((entry) => {
-                const createdDate = entry.createdAt
-                  ? entry.createdAt.toDate()
-                  : new Date(`${entry.date}T00:00:00`)
+                const loggedForDate = new Date(`${entry.date}T00:00:00`)
+                const loggedForLabel = Number.isNaN(loggedForDate.getTime())
+                  ? entry.date || 'Unknown date'
+                  : loggedForDate.toLocaleDateString()
+                const submittedDate = entry.createdAt?.toDate()
+                const submittedLabel = submittedDate
+                  ? submittedDate.toLocaleString()
+                  : 'Submission time unavailable'
 
                 return (
                   <li
                     key={entry.id}
                     className="rounded-lg border border-slate-800 bg-slate-950/60 px-4 py-3 text-sm text-slate-300"
                   >
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div>
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div className="space-y-1">
                         <p className="text-sm font-medium text-white">{entry.displayName}</p>
-                        <p className="text-xs text-slate-500">
-                          {createdDate.toLocaleString()}
-                        </p>
+                        <p className="text-xs text-slate-500">Logged for {loggedForLabel}</p>
+                        <p className="text-xs text-slate-500">Submitted on {submittedLabel}</p>
                       </div>
-                      <span className="text-emerald-400">{entry.displayQuantity}</span>
+                      <div className="flex items-center gap-3">
+                        <span className="text-emerald-400">{entry.displayQuantity}</span>
+                        {entry.userId === user?.uid ? (
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteProgress(entry)}
+                            disabled={deletingEntryId === entry.id}
+                            className="text-xs font-medium text-rose-300 transition hover:text-rose-200 disabled:cursor-not-allowed disabled:opacity-60"
+                          >
+                            {deletingEntryId === entry.id ? 'Deleting…' : 'Delete'}
+                          </button>
+                        ) : null}
+                      </div>
                     </div>
                     {entry.notes ? (
                       <p className="mt-2 text-xs text-slate-400">{entry.notes}</p>
