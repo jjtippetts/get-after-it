@@ -269,22 +269,27 @@ export default function GroupDetails() {
 
   const isOwner = useMemo(() => membership?.role === 'owner', [membership])
 
-  const personalEntries = useMemo(() => {
-    if (!user) {
-      return [] as ProgressEntry[]
-    }
+  const historyEntries = useMemo(() => {
+    const memberLookup = new Map(members.map((member) => [member.userId, member]))
 
     return [...progressEntries]
-      .filter((entry) => entry.userId === user.uid)
       .sort((first, second) => {
-        if (first.date === second.date) {
-          const firstTime = first.createdAt?.toMillis() ?? 0
-          const secondTime = second.createdAt?.toMillis() ?? 0
-          return secondTime - firstTime
+        const firstTime = first.createdAt?.toMillis() ?? 0
+        const secondTime = second.createdAt?.toMillis() ?? 0
+        if (firstTime === secondTime) {
+          return second.date.localeCompare(first.date)
         }
-        return first.date < second.date ? 1 : -1
+        return secondTime - firstTime
       })
-  }, [progressEntries, user])
+      .map((entry) => {
+        const member = memberLookup.get(entry.userId)
+        return {
+          ...entry,
+          displayName: member?.displayName ?? 'Member',
+          photoURL: member?.photoURL ?? null
+        }
+      })
+  }, [members, progressEntries])
 
   const aggregatedProgress = useMemo(() => {
     const memberLookup = new Map(members.map((member) => [member.userId, member]))
@@ -716,26 +721,35 @@ export default function GroupDetails() {
 
         <div className="mt-6">
           <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
-            Your history
+            Group history
           </h3>
-          {personalEntries.length ? (
+          {historyEntries.length ? (
             <ul className="mt-3 space-y-3">
-              {personalEntries.map((entry) => (
-                <li
-                  key={entry.id}
-                  className="rounded-lg border border-slate-800 bg-slate-950/60 px-4 py-3 text-sm text-slate-300"
-                >
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <span className="font-medium text-white">
-                      {new Date(`${entry.date}T00:00:00`).toLocaleDateString()}
-                    </span>
-                    <span className="text-emerald-400">+{entry.quantity}</span>
-                  </div>
-                  {entry.notes ? (
-                    <p className="mt-2 text-xs text-slate-400">{entry.notes}</p>
-                  ) : null}
-                </li>
-              ))}
+              {historyEntries.map((entry) => {
+                const createdDate = entry.createdAt
+                  ? entry.createdAt.toDate()
+                  : new Date(`${entry.date}T00:00:00`)
+
+                return (
+                  <li
+                    key={entry.id}
+                    className="rounded-lg border border-slate-800 bg-slate-950/60 px-4 py-3 text-sm text-slate-300"
+                  >
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div>
+                        <p className="text-sm font-medium text-white">{entry.displayName}</p>
+                        <p className="text-xs text-slate-500">
+                          {createdDate.toLocaleString()}
+                        </p>
+                      </div>
+                      <span className="text-emerald-400">+{entry.quantity}</span>
+                    </div>
+                    {entry.notes ? (
+                      <p className="mt-2 text-xs text-slate-400">{entry.notes}</p>
+                    ) : null}
+                  </li>
+                )
+              })}
             </ul>
           ) : (
             <p className="mt-3 text-sm text-slate-400">No progress logged yet.</p>
