@@ -823,11 +823,11 @@ export default function GroupDetails() {
         ) : (
           <p className="mt-4 text-sm text-slate-400">Join the group to log your progress.</p>
         )}
+      </section>
 
-        <div className="mt-6">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
-            Group history
-          </h3>
+      <section className="rounded-xl border border-slate-800 bg-slate-900/60 p-6 shadow-sm shadow-slate-950/60">
+        <h2 className="text-lg font-semibold text-white">Group history</h2>
+        <div className="mt-4">
           {historyEntries.length ? (
             <ul className="mt-3 space-y-3">
               {historyEntries.map((entry) => {

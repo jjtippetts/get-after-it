@@ -12,3 +12,4 @@ yarn-error.log*
 .env.local
 .firebase/
 tsconfig.tsbuildinfo
+tsconfig.node.tsbuildinfo
