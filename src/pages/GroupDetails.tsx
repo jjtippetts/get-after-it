@@ -62,7 +62,7 @@ type HistoryEntry = ProgressEntry & {
   displayQuantity: string
 }
 
-const HISTORY_PAGE_SIZE = 10
+const HISTORY_PAGE_SIZE = 5;
 
 export default function GroupDetails() {
   const { groupId } = useParams<{ groupId: string }>()
