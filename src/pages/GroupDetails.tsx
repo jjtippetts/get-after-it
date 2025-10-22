@@ -698,14 +698,6 @@ export default function GroupDetails() {
               {goal.goalType === 'daily' ? 'Target days' : 'Target total'}:{' '}
               <span className="font-medium text-white">{goal.targetValue}</span>
             </p>
-            <p>
-              {goal.goalType === 'daily'
-                ? 'Your days logged'
-                : 'Your total logged'}:{' '}
-              <span className="font-medium text-white">
-                {currentUserProgress?.total ?? 0}
-              </span>
-            </p>
             {goal.targetValue ? (
               <p>
                 Progress:{' '}
