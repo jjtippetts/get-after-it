@@ -67,6 +67,7 @@ const HISTORY_PAGE_SIZE = 10
 export default function GroupDetails() {
   const { groupId } = useParams<{ groupId: string }>()
   const { user } = useAuth()
+  const currentUserId = user?.uid ?? null
   const [group, setGroup] = useState<Group | null>(null)
   const [members, setMembers] = useState<Member[]>([])
   const [membership, setMembership] = useState<Member | null>(null)
@@ -436,6 +437,14 @@ export default function GroupDetails() {
     return { rows, winners, groupTotal }
   }, [goal?.goalType, goal?.targetValue, members, progressEntries])
 
+  const currentUserProgress = useMemo(() => {
+    if (!currentUserId) {
+      return null
+    }
+
+    return aggregatedProgress.rows.find((row) => row.userId === currentUserId) ?? null
+  }, [aggregatedProgress, currentUserId])
+
   const handleSaveGoal = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (!groupId || !isOwner) {
@@ -690,14 +699,18 @@ export default function GroupDetails() {
               <span className="font-medium text-white">{goal.targetValue}</span>
             </p>
             <p>
-              {goal.goalType === 'daily' ? 'Group days logged' : 'Group total logged'}:{' '}
-              <span className="font-medium text-white">{aggregatedProgress.groupTotal}</span>
+              {goal.goalType === 'daily'
+                ? 'Your days logged'
+                : 'Your total logged'}:{' '}
+              <span className="font-medium text-white">
+                {currentUserProgress?.total ?? 0}
+              </span>
             </p>
             {goal.targetValue ? (
               <p>
                 Progress:{' '}
                 <span className="font-medium text-white">
-                  {Math.min(aggregatedProgress.groupTotal, goal.targetValue)}/{goal.targetValue}
+                  {Math.min(currentUserProgress?.total ?? 0, goal.targetValue)}/{goal.targetValue}
                 </span>
               </p>
             ) : null}
