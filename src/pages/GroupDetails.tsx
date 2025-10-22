@@ -62,6 +62,8 @@ type HistoryEntry = ProgressEntry & {
   displayQuantity: string
 }
 
+const HISTORY_PAGE_SIZE = 10
+
 export default function GroupDetails() {
   const { groupId } = useParams<{ groupId: string }>()
   const { user } = useAuth()
@@ -87,6 +89,7 @@ export default function GroupDetails() {
   const [progressError, setProgressError] = useState<string | null>(null)
   const [deletingEntryId, setDeletingEntryId] = useState<string | null>(null)
   const [savingProgress, setSavingProgress] = useState(false)
+  const [historyPage, setHistoryPage] = useState(0)
 
   useEffect(() => {
     if (!groupId) {
@@ -311,6 +314,27 @@ export default function GroupDetails() {
         }
       })
   }, [goal?.goalType, members, progressEntries])
+
+  const paginatedHistoryEntries = useMemo(() => {
+    const startIndex = historyPage * HISTORY_PAGE_SIZE
+    return historyEntries.slice(startIndex, startIndex + HISTORY_PAGE_SIZE)
+  }, [historyEntries, historyPage])
+
+  const historyPageCount = useMemo(() => {
+    return Math.ceil(historyEntries.length / HISTORY_PAGE_SIZE)
+  }, [historyEntries.length])
+
+  useEffect(() => {
+    if (!historyPageCount) {
+      setHistoryPage(0)
+      return
+    }
+
+    setHistoryPage((currentPage) => {
+      const maxPageIndex = historyPageCount - 1
+      return Math.min(currentPage, maxPageIndex)
+    })
+  }, [historyPageCount])
 
   const aggregatedProgress = useMemo(() => {
     const memberLookup = new Map(members.map((member) => [member.userId, member]))
@@ -829,49 +853,85 @@ export default function GroupDetails() {
         <h2 className="text-lg font-semibold text-white">Group history</h2>
         <div className="mt-4">
           {historyEntries.length ? (
-            <ul className="mt-3 space-y-3">
-              {historyEntries.map((entry) => {
-                const loggedForDate = new Date(`${entry.date}T00:00:00`)
-                const loggedForLabel = Number.isNaN(loggedForDate.getTime())
-                  ? entry.date || 'Unknown date'
-                  : loggedForDate.toLocaleDateString()
-                const submittedDate = entry.createdAt?.toDate()
-                const submittedLabel = submittedDate
-                  ? submittedDate.toLocaleString()
-                  : 'Submission time unavailable'
+            <>
+              <ul className="mt-3 space-y-3">
+                {paginatedHistoryEntries.map((entry) => {
+                  const loggedForDate = new Date(`${entry.date}T00:00:00`)
+                  const loggedForLabel = Number.isNaN(loggedForDate.getTime())
+                    ? entry.date || 'Unknown date'
+                    : loggedForDate.toLocaleDateString()
+                  const submittedDate = entry.createdAt?.toDate()
+                  const submittedLabel = submittedDate
+                    ? submittedDate.toLocaleString()
+                    : 'Submission time unavailable'
 
-                return (
-                  <li
-                    key={entry.id}
-                    className="rounded-lg border border-slate-800 bg-slate-950/60 px-4 py-3 text-sm text-slate-300"
-                  >
-                    <div className="flex flex-wrap items-start justify-between gap-3">
-                      <div className="space-y-1">
-                        <p className="text-sm font-medium text-white">{entry.displayName}</p>
-                        <p className="text-xs text-slate-500">Logged for {loggedForLabel}</p>
-                        <p className="text-xs text-slate-500">Submitted on {submittedLabel}</p>
+                  return (
+                    <li
+                      key={entry.id}
+                      className="rounded-lg border border-slate-800 bg-slate-950/60 px-4 py-3 text-sm text-slate-300"
+                    >
+                      <div className="flex flex-wrap items-start justify-between gap-3">
+                        <div className="space-y-1">
+                          <p className="text-sm font-medium text-white">{entry.displayName}</p>
+                          <p className="text-xs text-slate-500">Logged for {loggedForLabel}</p>
+                          <p className="text-xs text-slate-500">Submitted on {submittedLabel}</p>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="text-emerald-400">{entry.displayQuantity}</span>
+                          {entry.userId === user?.uid ? (
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteProgress(entry)}
+                              disabled={deletingEntryId === entry.id}
+                              className="text-xs font-medium text-rose-300 transition hover:text-rose-200 disabled:cursor-not-allowed disabled:opacity-60"
+                            >
+                              {deletingEntryId === entry.id ? 'Deleting…' : 'Delete'}
+                            </button>
+                          ) : null}
+                        </div>
                       </div>
-                      <div className="flex items-center gap-3">
-                        <span className="text-emerald-400">{entry.displayQuantity}</span>
-                        {entry.userId === user?.uid ? (
-                          <button
-                            type="button"
-                            onClick={() => handleDeleteProgress(entry)}
-                            disabled={deletingEntryId === entry.id}
-                            className="text-xs font-medium text-rose-300 transition hover:text-rose-200 disabled:cursor-not-allowed disabled:opacity-60"
-                          >
-                            {deletingEntryId === entry.id ? 'Deleting…' : 'Delete'}
-                          </button>
-                        ) : null}
-                      </div>
-                    </div>
-                    {entry.notes ? (
-                      <p className="mt-2 text-xs text-slate-400">{entry.notes}</p>
-                    ) : null}
-                  </li>
-                )
-              })}
-            </ul>
+                      {entry.notes ? (
+                        <p className="mt-2 text-xs text-slate-400">{entry.notes}</p>
+                      ) : null}
+                    </li>
+                  )
+                })}
+              </ul>
+              {historyPageCount > 1 ? (
+                <div className="mt-4 flex flex-col items-center justify-between gap-3 text-xs text-slate-400 sm:flex-row">
+                  <p>
+                    Showing {historyPage * HISTORY_PAGE_SIZE + 1}–
+                    {Math.min((historyPage + 1) * HISTORY_PAGE_SIZE, historyEntries.length)} of{' '}
+                    {historyEntries.length}
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setHistoryPage((page) => Math.max(page - 1, 0))}
+                      disabled={historyPage === 0}
+                      className="rounded-md border border-slate-800 px-3 py-1 font-medium text-slate-300 transition hover:border-sky-500 hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      Previous
+                    </button>
+                    <span className="font-medium text-slate-500">
+                      Page {historyPage + 1} of {historyPageCount}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setHistoryPage((page) =>
+                          Math.min(page + 1, Math.max(historyPageCount - 1, 0))
+                        )
+                      }
+                      disabled={historyPage >= historyPageCount - 1}
+                      className="rounded-md border border-slate-800 px-3 py-1 font-medium text-slate-300 transition hover:border-sky-500 hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      Next
+                    </button>
+                  </div>
+                </div>
+              ) : null}
+            </>
           ) : (
             <p className="mt-3 text-sm text-slate-400">No progress logged yet.</p>
           )}
